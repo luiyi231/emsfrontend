@@ -98,7 +98,7 @@ export default function InvoicePage() {
 
     const filteredInvoices = invoices.filter(invoice =>
         invoice.id.toString().includes(searchTerm) ||
-        invoice.pedido?.id?.toString().includes(searchTerm)
+        invoice.pedidoId?.toString().includes(searchTerm)
     );
 
     if (loading) return <div className="p-6">Loading...</div>;
@@ -145,7 +145,7 @@ export default function InvoicePage() {
                             {filteredInvoices.map((invoice) => (
                                 <tr key={invoice.id} className="hover:bg-gray-50">
                                     <td className="p-4 font-medium text-gray-800">#{invoice.id}</td>
-                                    <td className="p-4 text-gray-600">#{invoice.pedido?.id || "N/A"}</td>
+                                    <td className="p-4 text-gray-600">#{invoice.pedidoId || "N/A"}</td>
                                     <td className="p-4 text-gray-600">{new Date(invoice.fecha).toLocaleDateString()}</td>
                                     <td className="p-4 text-gray-600">${invoice.total}</td>
                                     <td className="p-4 text-right space-x-2">
@@ -187,7 +187,7 @@ export default function InvoicePage() {
                                     <option value="">Select an order</option>
                                     {orders.map(order => (
                                         <option key={order.id} value={order.id}>
-                                            Order #{order.id} - ${order.total} ({order.cliente?.name || "Unknown"})
+                                            Order #{order.id} - ${order.total} ({order.clienteNombre || "Unknown"})
                                         </option>
                                     ))}
                                 </select>

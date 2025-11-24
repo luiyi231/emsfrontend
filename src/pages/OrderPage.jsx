@@ -32,6 +32,7 @@ export default function OrderPage() {
                 getAllProducts()
             ]);
             setOrders(ordersData || []);
+            console.log("Orders Data:", ordersData); // DEBUG: Check client names
             setClients(clientsData || []);
             setProducts(productsData || []);
         } catch (error) {
@@ -44,6 +45,11 @@ export default function OrderPage() {
 
     const handleAddItem = () => {
         if (!selectedProduct || quantity <= 0) return;
+
+        if (quantity > 999) {
+            Swal.fire("Warning", "You cannot add more than 999 units of a product.", "warning");
+            return;
+        }
 
         const product = products.find(p => p.id === parseInt(selectedProduct));
         if (!product) return;
@@ -126,7 +132,7 @@ export default function OrderPage() {
     };
 
     const filteredOrders = orders.filter(order =>
-        order.cliente?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.clienteNombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.id.toString().includes(searchTerm)
     );
 
@@ -174,7 +180,7 @@ export default function OrderPage() {
                             {filteredOrders.map((order) => (
                                 <tr key={order.id} className="hover:bg-gray-50">
                                     <td className="p-4 text-gray-600">#{order.id}</td>
-                                    <td className="p-4 font-medium text-gray-800">{order.cliente?.name || "Unknown"}</td>
+                                    <td className="p-4 font-medium text-gray-800">{order.clienteNombre || "Unknown"}</td>
                                     <td className="p-4 text-gray-600">{new Date(order.fecha).toLocaleDateString()}</td>
                                     <td className="p-4 text-gray-600">${order.total}</td>
                                     <td className="p-4 text-right space-x-2">
