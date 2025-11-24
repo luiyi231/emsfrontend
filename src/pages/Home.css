@@ -1,0 +1,135 @@
+/* =============================== */
+/* ✨ Estilo general del logo      */
+/* =============================== */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+/* 🎨 Fondo degradado circular detrás del logo */
+.logo-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+    rgba(0, 123, 255, 0.15),
+    rgba(0, 123, 255, 0.05) 60%,
+    transparent 100%);
+    padding: 25px;
+    animation: fadeInBackground 1s ease-out;
+}
+
+/* 🖼️ Animación y efecto del logo */
+.logo-animated {
+    opacity: 0;
+    transform: scale(0.9);
+    animation: fadeInScale 1.2s ease-out forwards, floating 6s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+/* 🪶 Efecto hover elegante */
+.logo-animated:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+}
+
+/* ✨ Animación de aparición del logo */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 🌬️ Movimiento flotante continuo */
+@keyframes floating {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-8px) scale(1.02);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ☁️ Aparición del fondo */
+@keyframes fadeInBackground {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =============================== */
+/* 📱 Responsividad adaptativa     */
+/* =============================== */
+@media (max-width: 992px) {
+    .logo-animated {
+        max-width: 150px !important;
+    }
+    .logo-bg {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-animated {
+        max-width: 120px !important;
+    }
+    .logo-bg {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-animated {
+        max-width: 90px !important;
+    }
+    .logo-bg {
+        padding: 10px;
+    }
+}
+
+/* =============================== */
+/* ✨ Animación del título         */
+/* =============================== */
+h1 {
+    opacity: 0;
+    animation: fadeInText 1.2s ease-out forwards;
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* 🎯 Estilo del botón principal */
+.btn-primary {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.25);
+}
