@@ -82,7 +82,17 @@ export default function ProductPage() {
             setIsModalOpen(false);
             fetchProducts();
         } catch (error) {
-            Swal.fire("Error", "Operation failed", "error");
+            console.error("Operation failed:", error);
+            let errorMessage = error.response?.data?.message || "Operation failed";
+
+            if (error.response?.data?.data && typeof error.response.data.data === 'object') {
+                const fieldErrors = Object.values(error.response.data.data).join("\n");
+                if (fieldErrors) {
+                    errorMessage += ":\n" + fieldErrors;
+                }
+            }
+
+            Swal.fire("Error", errorMessage, "error");
         }
     };
 
@@ -174,6 +184,7 @@ export default function ProductPage() {
                                 <input
                                     type="text"
                                     required
+                                    maxLength="50"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -184,6 +195,9 @@ export default function ProductPage() {
                                 <input
                                     type="number"
                                     required
+                                    min="0.01"
+                                    max="99999"
+                                    step="0.01"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                     value={formData.price}
                                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}

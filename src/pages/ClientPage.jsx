@@ -82,7 +82,17 @@ export default function ClientPage() {
             setIsModalOpen(false);
             fetchClients();
         } catch (error) {
-            Swal.fire("Error", "Operation failed", "error");
+            console.error("Operation failed:", error);
+            let errorMessage = error.response?.data?.message || "Operation failed";
+
+            if (error.response?.data?.data && typeof error.response.data.data === 'object') {
+                const fieldErrors = Object.values(error.response.data.data).join("\n");
+                if (fieldErrors) {
+                    errorMessage += ":\n" + fieldErrors;
+                }
+            }
+
+            Swal.fire("Error", errorMessage, "error");
         }
     };
 
@@ -175,6 +185,8 @@ export default function ClientPage() {
                                 <input
                                     type="text"
                                     required
+                                    pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+                                    title="El nombre solo puede contener letras y espacios"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -185,6 +197,8 @@ export default function ClientPage() {
                                 <input
                                     type="email"
                                     required
+                                    pattern="^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                    title="Email debe tener formato válido. No puede terminar con símbolos antes del @"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}

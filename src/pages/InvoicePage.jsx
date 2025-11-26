@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getAllInvoices, createInvoice, deleteInvoice } from "../services/invoiceService";
 import { getAllOrders } from "../services/orderService";
 import { Plus, Trash, Search } from "lucide-react";
@@ -16,9 +17,25 @@ export default function InvoicePage() {
         total: ""
     });
 
+    const location = useLocation();
+
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (location.state?.prefillOrder) {
+            const order = location.state.prefillOrder;
+            setFormData({
+                pedidoId: order.id,
+                fecha: new Date().toISOString().split('T')[0],
+                total: order.total
+            });
+            setIsModalOpen(true);
+            // Clear state to prevent reopening on refresh
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
 
     const fetchData = async () => {
         try {
@@ -92,7 +109,17 @@ export default function InvoicePage() {
             setIsModalOpen(false);
             fetchData();
         } catch (error) {
-            Swal.fire("Error", "Could not create invoice", "error");
+            console.error("Error creating invoice:", error);
+            let errorMessage = error.response?.data?.message || "Could not create invoice";
+
+            if (error.response?.data?.data && typeof error.response.data.data === 'object') {
+                const fieldErrors = Object.values(error.response.data.data).join("\n");
+                if (fieldErrors) {
+                    errorMessage += ":\n" + fieldErrors;
+                }
+            }
+
+            Swal.fire("Error", errorMessage, "error");
         }
     };
 
@@ -197,7 +224,9 @@ export default function InvoicePage() {
                                 <input
                                     type="date"
                                     required
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                    readOnly
+                                    disabled
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-gray-100 cursor-not-allowed"
                                     value={formData.fecha}
                                     onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
                                 />
@@ -208,7 +237,9 @@ export default function InvoicePage() {
                                     type="number"
                                     step="0.01"
                                     required
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                    readOnly
+                                    disabled
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-gray-100 cursor-not-allowed"
                                     value={formData.total}
                                     onChange={(e) => setFormData({ ...formData, total: e.target.value })}
                                 />

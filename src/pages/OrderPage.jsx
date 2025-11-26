@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllOrders, createOrder, deleteOrder } from "../services/orderService";
 import { getAllClients } from "../services/clientService";
 import { getAllProducts } from "../services/productService";
@@ -73,6 +74,10 @@ export default function OrderPage() {
         setOrderItems(orderItems.filter((_, i) => i !== index));
     };
 
+    const navigate = useNavigate();
+
+    // ... (existing code)
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!selectedClient || orderItems.length === 0) {
@@ -91,13 +96,39 @@ export default function OrderPage() {
         };
 
         try {
-            await createOrder(orderData);
-            Swal.fire("Success", "Order created successfully", "success");
+            const newOrder = await createOrder(orderData);
+
+            const result = await Swal.fire({
+                title: "Success",
+                text: "Order created successfully! Do you want to generate an invoice now?",
+                icon: "success",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, create invoice",
+                cancelButtonText: "No, later"
+            });
+
             setIsModalOpen(false);
             resetForm();
             fetchData();
+
+            if (result.isConfirmed) {
+                navigate("/invoices", { state: { prefillOrder: newOrder } });
+            }
+
         } catch (error) {
-            Swal.fire("Error", "Could not create order", "error");
+            console.error("Error creating order:", error);
+            let errorMessage = error.response?.data?.message || "Could not create order";
+
+            if (error.response?.data?.data && typeof error.response.data.data === 'object') {
+                const fieldErrors = Object.values(error.response.data.data).join("\n");
+                if (fieldErrors) {
+                    errorMessage += ":\n" + fieldErrors;
+                }
+            }
+
+            Swal.fire("Error", errorMessage, "error");
         }
     };
 
