@@ -46,18 +46,6 @@ export default function MainLayout() {
                         )}
                     </div>
 
-                    {/* 🔹 BOTÓN DE TEMA */}
-                    <button
-                        onClick={toggleTheme}
-                        className={`p-2 rounded-full transition-colors duration-200 ${
-                            theme === "dark"
-                                ? "bg-gray-700 hover:bg-gray-600"
-                                : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                        title="Cambiar tema"
-                    >
-                        {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-                    </button>
                 </header>
 
                 {/* 🔹 ÁREA DE CONTENIDO (RUTAS HIJAS) */}

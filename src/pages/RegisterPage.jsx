@@ -24,8 +24,38 @@ const RegisterPage = () => {
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value });
 
+    const validateForm = () => {
+        const { firstname, lastname, email, password } = form;
+        const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+        const emailRegex = /^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!firstname || !lastname || !email || !password) {
+            Swal.fire("⚠️ Advertencia", "Todos los campos son obligatorios", "warning");
+            return false;
+        }
+
+        if (!nameRegex.test(firstname)) {
+            Swal.fire("⚠️ Advertencia", "El nombre solo puede contener letras y espacios", "warning");
+            return false;
+        }
+
+        if (!nameRegex.test(lastname)) {
+            Swal.fire("⚠️ Advertencia", "El apellido solo puede contener letras y espacios", "warning");
+            return false;
+        }
+
+        if (!emailRegex.test(email)) {
+            Swal.fire("⚠️ Advertencia", "El email debe tener un formato válido", "warning");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
         setLoading(true);
 
         try {
@@ -48,9 +78,11 @@ const RegisterPage = () => {
 
             navigate("/");
         } catch (err) {
+            // Mostrar mensaje de error del backend si existe
+            const errorMessage = err.response?.data?.message || "No se pudo completar el registro. Intenta nuevamente.";
             Swal.fire(
                 "❌ Error",
-                "No se pudo completar el registro. Intenta nuevamente.",
+                errorMessage,
                 "error"
             );
         } finally {
@@ -157,8 +189,8 @@ const RegisterPage = () => {
                         className="text-blue-600 cursor-pointer hover:underline"
                         onClick={() => navigate("/login")}
                     >
-            Iniciar sesión
-          </span>
+                        Iniciar sesión
+                    </span>
                 </p>
             </div>
         </div>
