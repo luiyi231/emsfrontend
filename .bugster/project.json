@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "timestamp": 1764166154184,
+    "git": {
+      "branch": "master",
+      "commit": "6fa2fa29a83e238244e9b863caaa85fb096c4663"
+    }
+  },
+  "data": {
+    "frameworks": [
+      {
+        "id": "react",
+        "name": "React",
+        "dir_path": "C:\\Users\\Lenovo\\Downloads\\ventas\\emsfrontend"
+      }
+    ],
+    "commands": {
+      "test": {
+        "firstExecuted": true
+      }
+    }
+  }
+}
